@@ -5,6 +5,7 @@ import {
   getImgTag,
   getImgSrc,
 } from './crawling.js';
+import { downloadImage } from './download.js';
 
 (async () => {
   const data = await getHtmlFromUrl(
@@ -15,5 +16,9 @@ import {
   );
   const imgTag = getImgTag(parse);
   const imgSrc = getImgSrc(imgTag);
-  console.log(imgSrc);
+
+  // await downloadImage(imgSrc[0], `0.jpg`);
+  imgSrc.forEach(
+    async (src, index) => await downloadImage(src, `${index}.jpg`)
+  );
 })();
