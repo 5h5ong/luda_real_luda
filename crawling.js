@@ -3,10 +3,12 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import { attechDcUrl } from './string.js';
+import { sleep } from './lib.js';
 
 export const getHtmlFromUrl = async (url) => {
   try {
     const { data } = await axios.get(url);
+    await sleep(2000);
     return data;
   } catch (error) {
     throw new Error(error);
@@ -50,11 +52,15 @@ export const galleryImageParse = (data) => {
 
 // url object({name , url})을 사용해 많은 페이지에서 이미지 url 가져옴
 export const downloadManyPage = async (urlObject) => {
-  for (urlObject of urlObject) {
+  let result = [];
+
+  for (const object of urlObject) {
     const gallUrl = attechDcUrl(object.url);
 
     const data = await getHtmlFromUrl(gallUrl);
     const imgUrls = galleryImageParse(data);
+
+    result = [...result, { name: object.name, images: imgUrls }];
   }
-  return { name: object.name, images: imgUrls };
+  return result;
 };
