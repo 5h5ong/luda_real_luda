@@ -8,6 +8,7 @@ import { sleep } from './lib.js';
 export const getHtmlFromUrl = async (url) => {
   try {
     const { data } = await axios.get(url);
+    // dc는 과도한 request 시 접속을 막아버림. 그냥 자!
     await sleep(2000);
     return data;
   } catch (error) {
